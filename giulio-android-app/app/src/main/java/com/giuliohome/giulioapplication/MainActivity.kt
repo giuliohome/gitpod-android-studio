@@ -40,7 +40,7 @@ class MainActivity : ComponentActivity() {
             GiulioApplicationTheme {
                 // A surface container using the 'background' color from the theme
                 Surface(modifier = Modifier.fillMaxSize(), color = MaterialTheme.colorScheme.background) {
-                    Greeting(viewModel)
+                    Greeting(viewModel.sharedContent.value ?: "droid")
                 }
             }
         }
@@ -93,20 +93,18 @@ class MainActivity : ComponentActivity() {
 }
 
 @Composable
-fun Greeting(viewModel: SharedContentViewModel, modifier: Modifier = Modifier) {
-    // Access the shared content from the ViewModel
-    val sharedContent = viewModel.sharedContent.value  ?: "Cloud"
+fun Greeting(name: String, modifier: Modifier = Modifier) {
 
     Text(
-            text = "Hello $sharedContent!",
+            text = "Hello $name!",
             modifier = modifier
     )
 }
 
 @Preview(showBackground = true)
 @Composable
-fun GreetingPreview(viewModel: SharedContentViewModel) {
+fun GreetingPreview() {
     GiulioApplicationTheme {
-        Greeting(viewModel)
+        Greeting("cloud")
     }
 }
