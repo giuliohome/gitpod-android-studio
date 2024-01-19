@@ -53,8 +53,6 @@ class MainActivity : ComponentActivity() {
         if (Intent.ACTION_SEND == action && type != null) {
             if ("text/plain" == type) {
                 handleSharedText(intent, this) // Handle shared text
-            } else if (type.startsWith("http")) {
-                handleSharedUrl(intent, this) // Handle shared URL
             }
         }
 
@@ -64,20 +62,9 @@ class MainActivity : ComponentActivity() {
         val sharedText = intent.getStringExtra(Intent.EXTRA_TEXT)
         if (sharedText != null) {
             // Update the shared content state
-            viewModel.sharedContent.value = sharedText
+            viewModel.sharedContent.value = "open url: $sharedText"
             // Append a fixed part to the shared text
             val modifiedUrl = "https://my-app.cinemageddon2009.workers.dev/$sharedText"
-            openUrlInBrowser(modifiedUrl, context)
-        }
-    }
-
-    private fun handleSharedUrl(intent: Intent, context: Context) {
-        val sharedUri = intent.getParcelableExtra<Uri>(Intent.EXTRA_STREAM)
-        if (sharedUri != null) {
-            // Append a fixed part to the shared URL
-            val modifiedUrl = "https://my-app.cinemageddon2009.workers.dev/$sharedUri"
-            // Update the shared content state
-            viewModel.sharedContent.value = modifiedUrl
             openUrlInBrowser(modifiedUrl, context)
         }
     }
