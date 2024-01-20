@@ -34,6 +34,26 @@ class MainActivity : ComponentActivity() {
     // Initialize the ViewModel using the by viewModels() delegate
     private val viewModel: SharedContentViewModel by viewModels()
 
+
+    override fun onNewIntent(intent: Intent?) {
+        super.onNewIntent(intent)
+        setIntent(intent)
+        if (intent != null) {
+            val action = intent.action
+            val type = intent.type
+
+            if (Intent.ACTION_SEND == action && type != null) {
+                if ("text/plain" == type) {
+                    handleSharedText(intent, this) // Handle shared text
+                } else {
+                    viewModel.sharedContent.value = "unexpected $type type"
+                }
+            } else {
+                viewModel.sharedContent.value = "unexpected $action action"
+            }
+        }
+    }
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContent {
@@ -53,7 +73,11 @@ class MainActivity : ComponentActivity() {
         if (Intent.ACTION_SEND == action && type != null) {
             if ("text/plain" == type) {
                 handleSharedText(intent, this) // Handle shared text
+            } else {
+                viewModel.sharedContent.value = "onCreate unexpected $type type"
             }
+        } else {
+            viewModel.sharedContent.value = "onCreate unexpected $action action"
         }
 
     }
