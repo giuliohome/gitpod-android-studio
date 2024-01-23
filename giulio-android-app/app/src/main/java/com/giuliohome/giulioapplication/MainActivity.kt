@@ -87,7 +87,9 @@ class MainActivity : ComponentActivity() {
         if (sharedText != null) {
             var plainUrl: String = sharedText
             if (sharedText.startsWith("https://www.google.com/url?")) {
-                plainUrl = sharedText.split("url=")[1].split("&")[0].replace("_amp.html",".shtml")
+                plainUrl = sharedText.split("url=")[1].split("&")[0]
+                    .replace("_amp.html",".shtml")
+                    .replace("_amp.shtml",".shtml")
             }
             // Update the shared content state
             viewModel.sharedContent.value = "open url: $plainUrl"
