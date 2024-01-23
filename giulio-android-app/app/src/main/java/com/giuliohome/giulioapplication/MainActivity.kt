@@ -85,10 +85,14 @@ class MainActivity : ComponentActivity() {
     private fun handleSharedText(intent: Intent, context: Context) {
         val sharedText = intent.getStringExtra(Intent.EXTRA_TEXT)
         if (sharedText != null) {
+            var plainUrl: String = sharedText
+            if (sharedText.startsWith("https://www.google.com/url?")) {
+                plainUrl = sharedText.split("url=")[1].split("&")[0].replace("_amp.html",".shtml")
+            }
             // Update the shared content state
-            viewModel.sharedContent.value = "open url: $sharedText"
+            viewModel.sharedContent.value = "open url: $plainUrl"
             // Append a fixed part to the shared text
-            val modifiedUrl = "https://my-app.cinemageddon2009.workers.dev/$sharedText"
+            val modifiedUrl = "https://my-app.cinemageddon2009.workers.dev/$plainUrl"
             openUrlInBrowser(modifiedUrl, context)
         }
     }
